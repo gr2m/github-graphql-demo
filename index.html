@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link href="https://use.fontawesome.com/releases/v5.0.1/css/all.css" rel="stylesheet">
+    <style>
+      html {
+        font-size: .9em;
+      }
+      a {
+        color: inherit;
+        text-decoration: none !important;
+      }
+      img {
+        width: 30px;
+        height: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <template id="template">
+      <nav class="navbar navbar-dark bg-dark">
+        {{#me}}
+        <h1 class="navbar-brand">
+          <i class="fab fa-github"></i>
+          My Dashboard
+        </h1>
+
+        <span class="navbar-text" data-toggle="tooltip" data-placement="bottom" title="{{name}}, {{location}} ({{company}})">
+          <strong>{{login}}</strong>
+          <img class="rounded" src="{{avatarUrl}}">
+          <i class="fa fa-sign-out-alt" data-action="signout"></i>
+        </span>
+        {{/me}}
+      </nav>
+
+      <div class="container">
+        <div class="row">
+          {{#repositories}}
+          {{#mostStarred}}
+          <div class="col-sm-6">
+            <div class="card mt-3">
+              <div class="card-header">
+                <h4 class="card-title">
+                  <a href="{{url}}">{{name}}</a>
+                </h4>
+                <h6 class="card-subtitle mb-2 text-muted">{{description}}</h6>
+              </div>
+              {{#issues}}
+              <ul class="list-group list-group-flush">
+              {{#mostRecent}}
+                <li class="list-group-item">
+                  <h6 class="card-text">
+                    {{#author}}
+                    <a href="#" data-toggle="tooltip" data-placement="top" title="{{name}}, {{location}} ({{company}})">
+                      <img class="rounded" src="{{avatarUrl}}">
+                    </a>
+                    {{/author}}
+                    <a href="{{url}}">
+                      {{title}}
+                    </a>
+                  </h6>
+                </li>
+              {{/mostRecent}}
+              </ul>
+              {{^mostRecent}}
+              <div class="card-body">
+                <p class="card-text">No issues.</p>
+              </div>
+              {{/mostRecent}}
+              {{/issues}}
+              <div class="card-footer">
+                {{#stargazers}}
+                <ul class="list-inline float-right m-0">
+                  {{#mostRecent}}
+                  <li class="list-inline-item m-0">
+                    <a href="#" data-toggle="tooltip" data-placement="top" title="{{name}}, {{location}} ({{company}})">
+                      <img class="rounded" src="{{avatarUrl}}">
+                    </a>
+                  </li>
+                  {{/mostRecent}}
+                </ul>
+                <p class="card-text">
+                  <i class="fas fa-star"></i> {{totalCount}}
+                </p>
+                {{/stargazers}}
+              </div>
+            </div>
+          </div>
+          {{/mostStarred}}
+          {{^mostStarred}}
+          <p>No repositories.</p>
+          {{/mostStarred}}
+          {{/repositories}}
+        </div>
+      </div>
+    </template>
+    <div id="view"></div>
+
+    <script src="http://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.1/js/all.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js" integrity="sha256-iaqfO5ue0VbSGcEiQn+OeXxnxAMK2+QgHXIDA5bWtGI=" crossorigin="anonymous"></script>
+    <script src="01-load-static-data.js"></script>
+    <script src="02-load-graphql.js"></script>
+    <script src="03-load-rest.js"></script>
+
+<script>
+const htmlTemplate = $("#template").html();
+function render(data) {
+  $("#view").html(Mustache.render(htmlTemplate, data));
+  $('[data-toggle="tooltip"]').tooltip();
+}
+
+// uncomment or run the functions below manually in the browser to compare requests sent to server
+// loadStaticData();
+// loadGraphQl();
+// loadRest();
+</script>
+  </body>
+</html>
