@@ -1,0 +1,30 @@
+<h1>Loading...</h1>
+<script>
+let token = localStorage.getItem("token");
+if (!token) {
+  token = prompt("GitHub Access Token (github.com/settings/tokens/new)");
+  localStorage.setItem("token", token);
+}
+
+fetch("https://api.github.com/graphql", {
+  method: "post",
+  headers: {
+    Authorization: "bearer " + token
+  },
+  body: JSON.stringify({
+    query: `
+{
+  viewer {
+    login
+  }
+}
+`
+  })
+})
+  .then(response => response.json())
+
+  .then(json => {
+    console.log(`\njson ==============================`);
+    console.log(json);
+  });
+</script>
